@@ -25,7 +25,7 @@ hal_data['pwm'] looks like this:
 
 @pytest.fixture(scope="function")
 def drivetrain_default(robot):
-    return Drivetrain(robot, None, '../tests/test_configs/drivetrain_default.ini')
+    return Drivetrain(robot, None, "../tests/test_configs/drivetrain_default.ini")
 
 
 @pytest.fixture(scope="function")
@@ -35,16 +35,16 @@ def command_default(robot, drivetrain_default):
 
 
 def update_gyro(hal_data, command):
-    current = hal_data['analog_gyro'][1]['angle']
+    current = hal_data["analog_gyro"][1]["angle"]
     degrees_left = command._target_degrees - current
     if degrees_left >= 0:
-        hal_data['analog_gyro'][1]['angle'] += 1.0
+        hal_data["analog_gyro"][1]["angle"] += 1.0
     else:
-        hal_data['analog_gyro'][1]['angle'] -= 1.0
+        hal_data["analog_gyro"][1]["angle"] -= 1.0
 
 
 def isclose(a, b, rel_tol=0.1, abs_tol=0.0):
-    return abs(a-b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+    return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
 
 
 def test_init_default(command_default):
@@ -76,23 +76,35 @@ def test_initialize(command_default):
     assert command_default._target_degrees == 90
 
 
-@pytest.mark.parametrize("initial_angle,target_angle,threshold,speed,left_ex_speed,right_ex_speed", [
-    (0.0, 0.0, 1.0, 1.0, -1.0, -1.0),
-    (10.0, 30.0, 2.0, 1.0, -1.0, -1.0),
-    (20.0, 60.0, 5.0, 0.5, -0.5306122448979592, -0.5306122448979592),
-    (20.0, -60.0, 10.0, 1.0, 1.0, 1.0),
-    (10.0, -30.0, 2.0, 0.5, 0.5306122448979592, 0.5306122448979592),
-])
-def test_execute(robot, drivetrain_default, hal_data, initial_angle, target_angle, threshold, speed,
-                 left_ex_speed, right_ex_speed):
+@pytest.mark.parametrize(
+    "initial_angle,target_angle,threshold,speed,left_ex_speed,right_ex_speed",
+    [
+        (0.0, 0.0, 1.0, 1.0, -1.0, -1.0),
+        (10.0, 30.0, 2.0, 1.0, -1.0, -1.0),
+        (20.0, 60.0, 5.0, 0.5, -0.5306122448979592, -0.5306122448979592),
+        (20.0, -60.0, 10.0, 1.0, 1.0, 1.0),
+        (10.0, -30.0, 2.0, 0.5, 0.5306122448979592, 0.5306122448979592),
+    ],
+)
+def test_execute(
+    robot,
+    drivetrain_default,
+    hal_data,
+    initial_angle,
+    target_angle,
+    threshold,
+    speed,
+    left_ex_speed,
+    right_ex_speed,
+):
     robot.drivetrain = drivetrain_default
     td = TurnDegrees(robot, target_angle, speed, threshold, "CustomTurnDegrees", 15)
     assert td is not None
-    hal_data['analog_gyro'][1]['angle'] = initial_angle
+    hal_data["analog_gyro"][1]["angle"] = initial_angle
     td.initialize()
     td.execute()
-    assert hal_data['pwm'][1]['value'] == left_ex_speed
-    assert hal_data['pwm'][2]['value'] == right_ex_speed
+    assert hal_data["pwm"][1]["value"] == left_ex_speed
+    assert hal_data["pwm"][2]["value"] == right_ex_speed
 
 
 # TODO: Figure out how the new ADXRS450_Gyro is handled in hal_data
@@ -118,8 +130,8 @@ def test_interrupted(command_default):
 
 
 def test_end(command_default, hal_data):
-    assert hal_data['pwm'][1]['value'] == 0.0
-    assert hal_data['pwm'][2]['value'] == 0.0
+    assert hal_data["pwm"][1]["value"] == 0.0
+    assert hal_data["pwm"][2]["value"] == 0.0
 
 
 # @pytest.mark.parametrize("initial_angle,target_angle,threshold,speed,left_ex_speed,right_ex_speed", [

@@ -41,7 +41,12 @@ class Arm(Subsystem):
 
     _move_speed_scale: float = 1.0
 
-    def __init__(self, robot, name=None, configfile: str='/home/lvuser/py/configs/subsystems.ini'):
+    def __init__(
+        self,
+        robot,
+        name=None,
+        configfile: str = "/home/lvuser/py/configs/subsystems.ini",
+    ):
         super().__init__(name=name)
         self._robot = robot
         self._config = ConfigParser()
@@ -86,7 +91,6 @@ class Arm(Subsystem):
         self._lateral_motor.set(speed * self._move_speed_scale)
         self._update_smartdashboard()
 
-
     def move_arms_vertically(self, speed: float) -> None:
         if not self._vertical_motor:
             return
@@ -104,16 +108,29 @@ class Arm(Subsystem):
         SmartDashboard.putBoolean("Arm is open", self.is_open())
 
     def _init_components(self) -> None:
-        if self._config.getfloat(self._general_section, self._move_speed_scale_key) is not None:
-            self._move_speed_scale = self._config.getfloat(self._general_section, self._move_speed_scale_key)
+        if (
+            self._config.getfloat(self._general_section, self._move_speed_scale_key)
+            is not None
+        ):
+            self._move_speed_scale = self._config.getfloat(
+                self._general_section, self._move_speed_scale_key
+            )
 
         if self._config.getboolean(Arm._lateral_motor_section, Arm._enabled_key):
-            self._lateral_motor_channel = self._config.getint(self._lateral_motor_section, self._channel_key)
-            self._lateral_motor_inverted = self._config.getboolean(self._lateral_motor_section, self._inverted_key)
+            self._lateral_motor_channel = self._config.getint(
+                self._lateral_motor_section, self._channel_key
+            )
+            self._lateral_motor_inverted = self._config.getboolean(
+                self._lateral_motor_section, self._inverted_key
+            )
 
         if self._config.getboolean(Arm._vertical_motor_section, Arm._enabled_key):
-            self._vertical_motor_channel = self._config.getint(self._vertical_motor_section, self._channel_key)
-            self._vertical_motor_inverted = self._config.getboolean(self._vertical_motor_section, self._inverted_key)
+            self._vertical_motor_channel = self._config.getint(
+                self._vertical_motor_section, self._channel_key
+            )
+            self._vertical_motor_inverted = self._config.getboolean(
+                self._vertical_motor_section, self._inverted_key
+            )
 
         if self._vertical_motor_channel:
             self._vertical_motor = Talon(self._vertical_motor_channel)
@@ -126,21 +143,29 @@ class Arm(Subsystem):
                 self._lateral_motor.setInverted(self._lateral_motor_inverted)
 
         if self._config.getboolean(Arm._raised_switch_section, Arm._enabled_key):
-            self._raised_switch_channel = self._config.getint(self._raised_switch_section, self._channel_key)
+            self._raised_switch_channel = self._config.getint(
+                self._raised_switch_section, self._channel_key
+            )
             if self._raised_switch_channel:
                 self._raised_switch = DigitalInput(self._raised_switch_channel)
 
         if self._config.getboolean(Arm._lowered_switch_section, Arm._enabled_key):
-            self._lowered_switch_channel = self._config.getint(self._lowered_switch_section, self._channel_key)
+            self._lowered_switch_channel = self._config.getint(
+                self._lowered_switch_section, self._channel_key
+            )
             if self._lowered_switch_channel:
                 self._lowered_switch = DigitalInput(self._lowered_switch_channel)
 
         if self._config.getboolean(Arm._closed_switch_section, Arm._enabled_key):
-            self._closed_switch_channel = self._config.getint(self._closed_switch_section, self._channel_key)
+            self._closed_switch_channel = self._config.getint(
+                self._closed_switch_section, self._channel_key
+            )
             if self._closed_switch_channel:
                 self._closed_switch = DigitalInput(self._closed_switch_channel)
 
         if self._config.getboolean(Arm._open_switch_section, Arm._enabled_key):
-            self._open_switch_channel = self._config.getint(self._open_switch_section, self._channel_key)
+            self._open_switch_channel = self._config.getint(
+                self._open_switch_section, self._channel_key
+            )
             if self._open_switch_channel:
                 self._opened_switch = DigitalInput(self._open_switch_channel)

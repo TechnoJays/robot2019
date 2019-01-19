@@ -1,8 +1,8 @@
 from wpilib.command.command import Command
 
-class MoveArmLaterally(Command):
 
-    def __init__(self, robot, speed: float=0.0, name=None, timeout=5):
+class MoveArmLaterally(Command):
+    def __init__(self, robot, speed: float = 0.0, name=None, timeout=5):
         super().__init__(name, timeout)
         self.robot = robot
         self._arm_speed: float = speed * -1.0

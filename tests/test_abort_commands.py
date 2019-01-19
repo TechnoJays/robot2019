@@ -5,7 +5,7 @@ from commands.abort_commands import Abort
 
 @pytest.fixture(scope="function")
 def drivetrain_default(robot):
-    return Drivetrain(robot, None, '../tests/test_configs/drivetrain_default.ini')
+    return Drivetrain(robot, None, "../tests/test_configs/drivetrain_default.ini")
 
 
 @pytest.fixture(scope="function")
@@ -42,15 +42,12 @@ def test_execute(robot, hal_data, drivetrain_default):
     assert abrt is not None
     abrt.initialize()
     abrt.execute()
-    assert hal_data['pwm'][1]['value'] == 0.0
-    assert hal_data['pwm'][2]['value'] == 0.0
-    assert hal_data['pwm'][3]['value'] == 0.0
+    assert hal_data["pwm"][1]["value"] == 0.0
+    assert hal_data["pwm"][2]["value"] == 0.0
+    assert hal_data["pwm"][3]["value"] == 0.0
 
 
-@pytest.mark.parametrize("call_execute,finished", [
-    (False, False),
-    (True, True)
-])
+@pytest.mark.parametrize("call_execute,finished", [(False, False), (True, True)])
 def test_is_finished(command_default, call_execute, finished):
     command_default.initialize()
     if call_execute:

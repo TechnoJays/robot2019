@@ -7,8 +7,10 @@ from commands.move_arm_laterally import MoveArmLaterally
 from commands.move_arms_vertically import MoveArmsVertically
 from commands.move_winch import MoveWinch
 
+
 class JoystickAxis(object):
     """Enumerates joystick axis."""
+
     LEFTX = 0
     LEFTY = 1
     RIGHTX = 2
@@ -19,6 +21,7 @@ class JoystickAxis(object):
 
 class JoystickButtons(object):
     """Enumerates joystick buttons."""
+
     X = 1
     A = 2
     B = 3
@@ -33,6 +36,7 @@ class JoystickButtons(object):
 
 class UserController(object):
     """Enumerates the controllers."""
+
     DRIVER = 0
     SCORING = 1
 
@@ -42,6 +46,7 @@ class OI:
     This class is the glue that binds the controls on the physical operator
     interface to the commands and command groups that allow control of the robot.
     """
+
     _config = None
     _command_config = None
     _controllers = []
@@ -50,7 +55,7 @@ class OI:
 
     FULL_SPEED_AHEAD: float = 1.0
 
-    def __init__(self, robot, configfile='/home/lvuser/py/configs/joysticks.ini'):
+    def __init__(self, robot, configfile="/home/lvuser/py/configs/joysticks.ini"):
         self.robot = robot
         self._config = configparser.ConfigParser()
         self._config.read(configfile)
@@ -62,22 +67,38 @@ class OI:
         self._create_smartdashboard_buttons()
 
     def setup_button_bindings(self):
-        #release_gear_a_button = JoystickButton(self._controllers[UserController.SCORING], JoystickButtons.A)
-        #release_gear_a_button.whileHeld(ReleaseGear(self.robot))
+        # release_gear_a_button = JoystickButton(self._controllers[UserController.SCORING], JoystickButtons.A)
+        # release_gear_a_button.whileHeld(ReleaseGear(self.robot))
 
-        open_arm_button = JoystickButton(self._controllers[UserController.SCORING], JoystickButtons.RIGHTBUMPER)
+        open_arm_button = JoystickButton(
+            self._controllers[UserController.SCORING], JoystickButtons.RIGHTBUMPER
+        )
         open_arm_button.whileHeld(MoveArmLaterally(self.robot, self.FULL_SPEED_AHEAD))
-        close_arm_button = JoystickButton(self._controllers[UserController.SCORING], JoystickButtons.RIGHTTRIGGER)
+        close_arm_button = JoystickButton(
+            self._controllers[UserController.SCORING], JoystickButtons.RIGHTTRIGGER
+        )
         close_arm_button.whileHeld(MoveArmLaterally(self.robot, -self.FULL_SPEED_AHEAD))
 
-        raise_arms_button = JoystickButton(self._controllers[UserController.SCORING], JoystickButtons.Y)
-        raise_arms_button.whileHeld(MoveArmsVertically(self.robot, self.FULL_SPEED_AHEAD))
-        lower_arms_button = JoystickButton(self._controllers[UserController.SCORING], JoystickButtons.A)
-        lower_arms_button.whileHeld(MoveArmsVertically(self.robot, -self.FULL_SPEED_AHEAD))
+        raise_arms_button = JoystickButton(
+            self._controllers[UserController.SCORING], JoystickButtons.Y
+        )
+        raise_arms_button.whileHeld(
+            MoveArmsVertically(self.robot, self.FULL_SPEED_AHEAD)
+        )
+        lower_arms_button = JoystickButton(
+            self._controllers[UserController.SCORING], JoystickButtons.A
+        )
+        lower_arms_button.whileHeld(
+            MoveArmsVertically(self.robot, -self.FULL_SPEED_AHEAD)
+        )
 
-        raise_winch_button = JoystickButton(self._controllers[UserController.SCORING], JoystickButtons.LEFTBUMPER)
+        raise_winch_button = JoystickButton(
+            self._controllers[UserController.SCORING], JoystickButtons.LEFTBUMPER
+        )
         raise_winch_button.whileHeld(MoveWinch(self.robot, self.FULL_SPEED_AHEAD))
-        lower_winch_button = JoystickButton(self._controllers[UserController.SCORING], JoystickButtons.LEFTTRIGGER)
+        lower_winch_button = JoystickButton(
+            self._controllers[UserController.SCORING], JoystickButtons.LEFTTRIGGER
+        )
         lower_winch_button.whileHeld(MoveWinch(self.robot, -self.FULL_SPEED_AHEAD))
 
     def get_axis(self, user, axis):
@@ -159,9 +180,17 @@ class OI:
         JoystickButtons.A = self._config.getint(button_binding_section, "A")
         JoystickButtons.B = self._config.getint(button_binding_section, "B")
         JoystickButtons.Y = self._config.getint(button_binding_section, "Y")
-        JoystickButtons.LEFTBUMPER = self._config.getint(button_binding_section, "LEFTBUMPER")
-        JoystickButtons.RIGHTBUMPER = self._config.getint(button_binding_section, "RIGHTBUMPER")
-        JoystickButtons.LEFTTRIGGER = self._config.getint(button_binding_section, "LEFTTRIGGER")
-        JoystickButtons.RIGHTTRIGGER = self._config.getint(button_binding_section, "RIGHTTRIGGER")
+        JoystickButtons.LEFTBUMPER = self._config.getint(
+            button_binding_section, "LEFTBUMPER"
+        )
+        JoystickButtons.RIGHTBUMPER = self._config.getint(
+            button_binding_section, "RIGHTBUMPER"
+        )
+        JoystickButtons.LEFTTRIGGER = self._config.getint(
+            button_binding_section, "LEFTTRIGGER"
+        )
+        JoystickButtons.RIGHTTRIGGER = self._config.getint(
+            button_binding_section, "RIGHTTRIGGER"
+        )
         JoystickButtons.BACK = self._config.getint(button_binding_section, "BACK")
         JoystickButtons.START = self._config.getint(button_binding_section, "START")

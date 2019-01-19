@@ -3,8 +3,9 @@ import math
 
 
 class SetElevatorToPosition(Command):
-
-    def __init__(self, robot, speed, encoder_position, threshold, name=None, timeout=15):
+    def __init__(
+        self, robot, speed, encoder_position, threshold, name=None, timeout=15
+    ):
         super().__init__(name, timeout)
         self.robot = robot
         self._speed = speed
@@ -33,7 +34,10 @@ class SetElevatorToPosition(Command):
     def isFinished(self):
         """Returns true when the Command no longer needs to be run"""
         current = self.robot.elevator.get_encoder_value()
-        return math.fabs(self._encoder_target - current) <= self._encoder_threshold or self.isTimedOut()
+        return (
+            math.fabs(self._encoder_target - current) <= self._encoder_threshold
+            or self.isTimedOut()
+        )
 
     def end(self):
         """Called once after isFinished returns true"""

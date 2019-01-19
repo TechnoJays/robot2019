@@ -1,9 +1,9 @@
 from wpilib.command.command import Command
 from oi import UserController, JoystickAxis
 
-class FeedCube(Command):
 
-    def __init__(self, robot, speed: float=0.0, name=None, timeout=5):
+class FeedCube(Command):
+    def __init__(self, robot, speed: float = 0.0, name=None, timeout=5):
         super().__init__(name, timeout)
         self.robot = robot
         self._feeder_speed: float = speed
@@ -15,7 +15,9 @@ class FeedCube(Command):
 
     def execute(self):
         """Called repeatedly when this Command is scheduled to run"""
-        move_speed: float = self.robot.oi.get_axis(UserController.SCORING, JoystickAxis.RIGHTY)
+        move_speed: float = self.robot.oi.get_axis(
+            UserController.SCORING, JoystickAxis.RIGHTY
+        )
         self.robot.feeder.feed_cube(move_speed)
         return Command.execute(self)
 

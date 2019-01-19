@@ -2,7 +2,6 @@ from wpilib.command.command import Command
 
 
 class LowerElevatorToPosition(Command):
-
     def __init__(self, robot, speed, encoder_position, name=None, timeout=15):
         super().__init__(name, timeout)
         self.robot = robot
@@ -21,7 +20,10 @@ class LowerElevatorToPosition(Command):
 
     def isFinished(self):
         """Returns true when the Command no longer needs to be run"""
-        return self.robot.elevator.get_encoder_value() <= self._encoder_target or self.isTimedOut()
+        return (
+            self.robot.elevator.get_encoder_value() <= self._encoder_target
+            or self.isTimedOut()
+        )
 
     def end(self):
         """Called once after isFinished returns true"""

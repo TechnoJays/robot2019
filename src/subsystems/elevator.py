@@ -32,7 +32,9 @@ class Elevator(Subsystem):
     _encoder_top_bound = None
     _encoder_bottom_bound = None
 
-    def __init__(self, robot, name=None, configfile='/home/lvuser/py/configs/subsystems.ini'):
+    def __init__(
+        self, robot, name=None, configfile="/home/lvuser/py/configs/subsystems.ini"
+    ):
         self._robot = robot
         self._subsystem_config = configfile
         self._init_components()
@@ -77,7 +79,9 @@ class Elevator(Subsystem):
         if config.getboolean(self.MOTOR_SECTION, self.ENABLED):
             motor_channel = config.getint(self.MOTOR_SECTION, self.CHANNEL)
             motor_inverted = config.getboolean(self.MOTOR_SECTION, self.INVERTED)
-            self._speed_scaling = config.getfloat(self.MOTOR_SECTION, self.SPEED_SCALING)
+            self._speed_scaling = config.getfloat(
+                self.MOTOR_SECTION, self.SPEED_SCALING
+            )
             self._motor = VictorSP(motor_channel)
             if self._motor:
                 self._motor.setInverted(motor_inverted)
@@ -87,6 +91,12 @@ class Elevator(Subsystem):
             encoder_b_channel = config.getint(self.ENCODER_SECTION, self.B_CHANNEL)
             encoder_reversed = config.getboolean(self.ENCODER_SECTION, self.REVERSED)
             encoder_type = config.getint(self.ENCODER_SECTION, self.TYPE)
-            self._encoder_top_bound = config.getint(self.ENCODER_SECTION, self.TOP_BOUND)
-            self._encoder_bottom_bound = config.getint(self.ENCODER_SECTION, self.BOTTOM_BOUND)
-            self._encoder = Encoder(encoder_a_channel, encoder_b_channel, encoder_reversed, encoder_type)
+            self._encoder_top_bound = config.getint(
+                self.ENCODER_SECTION, self.TOP_BOUND
+            )
+            self._encoder_bottom_bound = config.getint(
+                self.ENCODER_SECTION, self.BOTTOM_BOUND
+            )
+            self._encoder = Encoder(
+                encoder_a_channel, encoder_b_channel, encoder_reversed, encoder_type
+            )

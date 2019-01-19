@@ -25,7 +25,9 @@ class Winch(Subsystem):
     _encoder = None
     _encoder_count = 0
 
-    def __init__(self, robot, name=None, configfile='/home/lvuser/py/configs/subsystems.ini'):
+    def __init__(
+        self, robot, name=None, configfile="/home/lvuser/py/configs/subsystems.ini"
+    ):
         self._robot = robot
         self._config = configparser.ConfigParser()
         self._config.read(configfile)
@@ -60,15 +62,27 @@ class Winch(Subsystem):
 
     def _init_components(self):
         if self._config.getboolean(Winch._motor_section, Winch._enabled_key):
-            motor_channel = self._config.getint(Winch._motor_section, Winch._channel_key)
-            motor_inverted = self._config.getboolean(Winch._motor_section, Winch._inverted_key)
+            motor_channel = self._config.getint(
+                Winch._motor_section, Winch._channel_key
+            )
+            motor_inverted = self._config.getboolean(
+                Winch._motor_section, Winch._inverted_key
+            )
             self._motor = VictorSP(motor_channel)
             if self._motor:
                 self._motor.setInverted(motor_inverted)
 
         if self._config.getboolean(Winch._encoder_section, Winch._enabled_key):
-            encoder_a_channel = self._config.getint(Winch._encoder_section, Winch._a_channel_key)
-            encoder_b_channel = self._config.getint(Winch._encoder_section, Winch._b_channel_key)
-            encoder_inverted = self._config.getboolean(Winch._encoder_section, Winch._reversed_key)
+            encoder_a_channel = self._config.getint(
+                Winch._encoder_section, Winch._a_channel_key
+            )
+            encoder_b_channel = self._config.getint(
+                Winch._encoder_section, Winch._b_channel_key
+            )
+            encoder_inverted = self._config.getboolean(
+                Winch._encoder_section, Winch._reversed_key
+            )
             encoder_type = self._config.getint(Winch._encoder_section, Winch._type_key)
-            self._encoder = Encoder(encoder_a_channel, encoder_b_channel, encoder_inverted, encoder_type)
+            self._encoder = Encoder(
+                encoder_a_channel, encoder_b_channel, encoder_inverted, encoder_type
+            )

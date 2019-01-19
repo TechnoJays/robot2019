@@ -3,7 +3,6 @@ from oi import UserController, JoystickAxis
 
 
 class MoveElevator(Command):
-
     def __init__(self, robot, name=None, timeout=15):
         super().__init__(name, timeout)
         self.robot = robot
@@ -15,7 +14,9 @@ class MoveElevator(Command):
 
     def execute(self):
         """Called repeatedly when this Command is scheduled to run"""
-        move_speed = self.robot.oi.get_axis(UserController.SCORING, JoystickAxis.LEFTY) * -1.0
+        move_speed = (
+            self.robot.oi.get_axis(UserController.SCORING, JoystickAxis.LEFTY) * -1.0
+        )
         self.robot.elevator.move_elevator(move_speed)
         return Command.execute(self)
 

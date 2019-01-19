@@ -45,7 +45,10 @@ class DriveEncoderCounts(Command):
         # Get encoder count
         current = self.robot.drivetrain.get_encoder_value()
         # If abs(target - current) < threshold then return true
-        return math.fabs(self._target_position - current) <= self._encoder_threshold or self.isTimedOut()
+        return (
+            math.fabs(self._target_position - current) <= self._encoder_threshold
+            or self.isTimedOut()
+        )
 
     def end(self):
         """Called once after isFinished returns true"""

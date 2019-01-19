@@ -59,7 +59,9 @@ class Drivetrain(Subsystem):
     _gyro = None
     _gyro_angle = 0.0
 
-    def __init__(self, robot, name=None, configfile='/home/lvuser/py/configs/subsystems.ini'):
+    def __init__(
+        self, robot, name=None, configfile="/home/lvuser/py/configs/subsystems.ini"
+    ):
         self._robot = robot
         self._config = configparser.ConfigParser()
         self._config.read(configfile)
@@ -70,8 +72,14 @@ class Drivetrain(Subsystem):
         super().__init__(name=name)
 
     def initDefaultCommand(self):
-        self.setDefaultCommand(TankDrive(self._robot, 'TankDrive', modifier_scaling=self._modifier_scaling,
-                                         dpad_scaling=self._dpad_scaling))
+        self.setDefaultCommand(
+            TankDrive(
+                self._robot,
+                "TankDrive",
+                modifier_scaling=self._modifier_scaling,
+                dpad_scaling=self._dpad_scaling,
+            )
+        )
 
     def get_left_encoder_value(self):
         if self._left_encoder:
@@ -145,7 +153,9 @@ class Drivetrain(Subsystem):
     def arcade_drive(self, linear_distance, turn_angle, squared_inputs=True):
         determined_turn_angle = self._modify_turn_angle(turn_angle)
         if self._robot_drive:
-            self._robot_drive.arcadeDrive(linear_distance, determined_turn_angle, squared_inputs)
+            self._robot_drive.arcadeDrive(
+                linear_distance, determined_turn_angle, squared_inputs
+            )
         self._update_smartdashboard_arcade_drive(linear_distance, determined_turn_angle)
         self.get_gyro_angle()
         self.get_left_encoder_value()
@@ -172,45 +182,104 @@ class Drivetrain(Subsystem):
         SmartDashboard.putNumber("Gyro Angle", self._gyro_angle)
 
     def _init_components(self):
-        self._max_speed = self._config.getfloat(self._general_section, Drivetrain._max_speed_key)
-        self._modifier_scaling = self._config.getfloat(self._general_section, Drivetrain._modifier_scaling_key)
-        self._dpad_scaling = self._config.getfloat(self._general_section, Drivetrain._dpad_scaling_key)
+        self._max_speed = self._config.getfloat(
+            self._general_section, Drivetrain._max_speed_key
+        )
+        self._modifier_scaling = self._config.getfloat(
+            self._general_section, Drivetrain._modifier_scaling_key
+        )
+        self._dpad_scaling = self._config.getfloat(
+            self._general_section, Drivetrain._dpad_scaling_key
+        )
 
-        if not self._config.getboolean(self._general_section, "ARCADE_DRIVE_ROTATION_INVERTED"):
+        if not self._config.getboolean(
+            self._general_section, "ARCADE_DRIVE_ROTATION_INVERTED"
+        ):
             self._arcade_rotation_modifier = 1
 
-        if self._config.getboolean(Drivetrain._left_encoder_section, Drivetrain._enabled_key):
-            self._left_encoder_a_channel = self._config.getint(self._left_encoder_section, Drivetrain._a_channel_key)
-            self._left_encoder_b_channel = self._config.getint(self._left_encoder_section, Drivetrain._b_channel_key)
-            self._left_encoder_reversed = self._config.getboolean(self._left_encoder_section, Drivetrain._reversed_key)
-            self._left_encoder_type = self._config.getint(self._left_encoder_section, Drivetrain._type_key)
-            if self._left_encoder_a_channel and self._left_encoder_b_channel and self._left_encoder_type:
-                self._left_encoder = Encoder(self._left_encoder_a_channel, self._left_encoder_b_channel,
-                                             self._left_encoder_reversed, self._left_encoder_type)
+        if self._config.getboolean(
+            Drivetrain._left_encoder_section, Drivetrain._enabled_key
+        ):
+            self._left_encoder_a_channel = self._config.getint(
+                self._left_encoder_section, Drivetrain._a_channel_key
+            )
+            self._left_encoder_b_channel = self._config.getint(
+                self._left_encoder_section, Drivetrain._b_channel_key
+            )
+            self._left_encoder_reversed = self._config.getboolean(
+                self._left_encoder_section, Drivetrain._reversed_key
+            )
+            self._left_encoder_type = self._config.getint(
+                self._left_encoder_section, Drivetrain._type_key
+            )
+            if (
+                self._left_encoder_a_channel
+                and self._left_encoder_b_channel
+                and self._left_encoder_type
+            ):
+                self._left_encoder = Encoder(
+                    self._left_encoder_a_channel,
+                    self._left_encoder_b_channel,
+                    self._left_encoder_reversed,
+                    self._left_encoder_type,
+                )
 
-        if self._config.getboolean(Drivetrain._right_encoder_section, Drivetrain._enabled_key):
-            self._right_encoder_a_channel = self._config.getint(self._right_encoder_section, Drivetrain._a_channel_key)
-            self._right_encoder_b_channel = self._config.getint(self._right_encoder_section, Drivetrain._b_channel_key)
-            self._right_encoder_reversed = self._config.getboolean(self._right_encoder_section,
-                                                                   Drivetrain._reversed_key)
-            self._right_encoder_type = self._config.getint(self._right_encoder_section, Drivetrain._type_key)
-            if self._right_encoder_a_channel and self._right_encoder_b_channel and self._right_encoder_type:
-                self._right_encoder = Encoder(self._right_encoder_a_channel, self._right_encoder_b_channel,
-                                              self._right_encoder_reversed, self._right_encoder_type)
+        if self._config.getboolean(
+            Drivetrain._right_encoder_section, Drivetrain._enabled_key
+        ):
+            self._right_encoder_a_channel = self._config.getint(
+                self._right_encoder_section, Drivetrain._a_channel_key
+            )
+            self._right_encoder_b_channel = self._config.getint(
+                self._right_encoder_section, Drivetrain._b_channel_key
+            )
+            self._right_encoder_reversed = self._config.getboolean(
+                self._right_encoder_section, Drivetrain._reversed_key
+            )
+            self._right_encoder_type = self._config.getint(
+                self._right_encoder_section, Drivetrain._type_key
+            )
+            if (
+                self._right_encoder_a_channel
+                and self._right_encoder_b_channel
+                and self._right_encoder_type
+            ):
+                self._right_encoder = Encoder(
+                    self._right_encoder_a_channel,
+                    self._right_encoder_b_channel,
+                    self._right_encoder_reversed,
+                    self._right_encoder_type,
+                )
 
         if self._config.getboolean(Drivetrain._gyro_section, Drivetrain._enabled_key):
-            gyro_channel = self._config.getint(self._gyro_section, Drivetrain._channel_key)
+            gyro_channel = self._config.getint(
+                self._gyro_section, Drivetrain._channel_key
+            )
             self._gyro = ADXRS450_Gyro(gyro_channel)
 
-        if self._config.getboolean(Drivetrain._left_motor_section, Drivetrain._enabled_key):
-            self._left_motor = Spark(self._config.getint(self._left_motor_section, Drivetrain._channel_key))
-            self._left_motor.setInverted(self._config.getboolean(
-                Drivetrain._left_motor_section, Drivetrain._inverted_key))
+        if self._config.getboolean(
+            Drivetrain._left_motor_section, Drivetrain._enabled_key
+        ):
+            self._left_motor = Spark(
+                self._config.getint(self._left_motor_section, Drivetrain._channel_key)
+            )
+            self._left_motor.setInverted(
+                self._config.getboolean(
+                    Drivetrain._left_motor_section, Drivetrain._inverted_key
+                )
+            )
 
-        if self._config.getboolean(Drivetrain._right_motor_section, Drivetrain._enabled_key):
-            self._right_motor = Spark(self._config.getint(self._right_motor_section, Drivetrain._channel_key))
-            self._right_motor.setInverted(self._config.getboolean(
-                Drivetrain._right_motor_section, Drivetrain._inverted_key))
+        if self._config.getboolean(
+            Drivetrain._right_motor_section, Drivetrain._enabled_key
+        ):
+            self._right_motor = Spark(
+                self._config.getint(self._right_motor_section, Drivetrain._channel_key)
+            )
+            self._right_motor.setInverted(
+                self._config.getboolean(
+                    Drivetrain._right_motor_section, Drivetrain._inverted_key
+                )
+            )
 
         if self._left_motor and self._right_motor:
             self._robot_drive = DifferentialDrive(self._left_motor, self._right_motor)

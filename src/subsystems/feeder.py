@@ -29,7 +29,12 @@ class Feeder(Subsystem):
     _pickup_speed_scale: float = 0.0
     _shoot_speed_scale: float = 0.0
 
-    def __init__(self, robot, name=None, configfile: str='/home/lvuser/py/configs/subsystems.ini'):
+    def __init__(
+        self,
+        robot,
+        name=None,
+        configfile: str = "/home/lvuser/py/configs/subsystems.ini",
+    ):
         super().__init__(name=name)
         self._robot = robot
         self._config = ConfigParser()
@@ -63,12 +68,20 @@ class Feeder(Subsystem):
         SmartDashboard.putBoolean("Cube Acquired", self.has_cube())
 
     def _init_components(self):
-        self._pickup_speed_scale = self._config.getfloat(self._general_section, self._pickup_speed_scale_key)
-        self._shoot_speed_scale = self._config.getfloat(self._general_section, self._shoot_speed_scale_key)
+        self._pickup_speed_scale = self._config.getfloat(
+            self._general_section, self._pickup_speed_scale_key
+        )
+        self._shoot_speed_scale = self._config.getfloat(
+            self._general_section, self._shoot_speed_scale_key
+        )
 
         if self._config.getboolean(Feeder._general_section, Feeder._enabled_key):
-            self._motor_channel = self._config.getint(self._general_section, self._channel_key)
-            self._motor_inverted = self._config.getboolean(self._general_section, self._inverted_key)
+            self._motor_channel = self._config.getint(
+                self._general_section, self._channel_key
+            )
+            self._motor_inverted = self._config.getboolean(
+                self._general_section, self._inverted_key
+            )
 
         if self._motor_channel:
             self._motor = Talon(self._motor_channel)
@@ -76,7 +89,9 @@ class Feeder(Subsystem):
                 self._motor.setInverted(self._motor_inverted)
 
         if self._config.getboolean(Feeder._switch_section, Feeder._enabled_key):
-            self._switch_channel = self._config.getint(self._switch_section, self._channel_key)
+            self._switch_channel = self._config.getint(
+                self._switch_section, self._channel_key
+            )
 
         if self._switch_channel:
             self._switch = DigitalInput(self._switch_channel)

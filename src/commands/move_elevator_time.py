@@ -3,7 +3,6 @@ from stopwatch import Stopwatch
 
 
 class MoveElevatorTime(Command):
-
     def __init__(self, robot, directional_speed, duration, name=None, timeout=15):
         super().__init__(name, timeout)
         self.robot = robot

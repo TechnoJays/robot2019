@@ -26,7 +26,7 @@ hal_data['pwm'] looks like this:
 
 @pytest.fixture(scope="function")
 def drivetrain_default(robot):
-    return Drivetrain(robot, None, '../tests/test_configs/drivetrain_default.ini')
+    return Drivetrain(robot, None, "../tests/test_configs/drivetrain_default.ini")
 
 
 @pytest.fixture(scope="function")
@@ -64,21 +64,26 @@ def test_initialize(command_default):
     assert command_default._stopwatch._running
 
 
-@pytest.mark.parametrize("speed,left_ex_speed,right_ex_speed", [
-    (0.0, 0.0, 0.0),
-    (0.5,  0.5306122448979592,  -0.5306122448979592),
-    (1.0, 1.0, -1.0),
-    (-0.5,  -0.5306122448979592,  0.5306122448979592),
-    (-1.0, -1.0, 1.0),
-])
-def test_execute(robot, drivetrain_default, hal_data, speed, left_ex_speed, right_ex_speed):
+@pytest.mark.parametrize(
+    "speed,left_ex_speed,right_ex_speed",
+    [
+        (0.0, 0.0, 0.0),
+        (0.5, 0.5306122448979592, -0.5306122448979592),
+        (1.0, 1.0, -1.0),
+        (-0.5, -0.5306122448979592, 0.5306122448979592),
+        (-1.0, -1.0, 1.0),
+    ],
+)
+def test_execute(
+    robot, drivetrain_default, hal_data, speed, left_ex_speed, right_ex_speed
+):
     robot.drivetrain = drivetrain_default
     dt = DriveTime(robot, 5, speed, "CustomDriveTime", 15)
     assert dt is not None
     dt.initialize()
     dt.execute()
-    assert hal_data['pwm'][1]['value'] == left_ex_speed
-    assert hal_data['pwm'][2]['value'] == right_ex_speed
+    assert hal_data["pwm"][1]["value"] == left_ex_speed
+    assert hal_data["pwm"][2]["value"] == right_ex_speed
 
 
 def test_is_finished(command_default):
@@ -92,20 +97,32 @@ def test_interrupted(command_default):
 
 def test_end(command_default, hal_data):
     assert command_default._stopwatch._running is False
-    assert hal_data['pwm'][1]['value'] == 0.0
-    assert hal_data['pwm'][2]['value'] == 0.0
+    assert hal_data["pwm"][1]["value"] == 0.0
+    assert hal_data["pwm"][2]["value"] == 0.0
 
 
 def isclose(a, b, rel_tol=0.1, abs_tol=0.0):
-    return abs(a-b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+    return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
 
 
-@pytest.mark.parametrize("duration,speed,timeout,left_ex_speed,right_ex_speed", [
-    (0.5, 0.5, 5.0, 0.5306122448979592, -0.5306122448979592),
-    (2.0, 1.0, 15.0, 1.0, -1.0),
-    # (5.0, 1.0, 1.0, 1.0, -1.0), # Timeouts don't seem to work in testing
-])
-def test_command_full(robot, drivetrain_default, hal_data, duration, speed, timeout, left_ex_speed, right_ex_speed):
+@pytest.mark.parametrize(
+    "duration,speed,timeout,left_ex_speed,right_ex_speed",
+    [
+        (0.5, 0.5, 5.0, 0.5306122448979592, -0.5306122448979592),
+        (2.0, 1.0, 15.0, 1.0, -1.0),
+        # (5.0, 1.0, 1.0, 1.0, -1.0), # Timeouts don't seem to work in testing
+    ],
+)
+def test_command_full(
+    robot,
+    drivetrain_default,
+    hal_data,
+    duration,
+    speed,
+    timeout,
+    left_ex_speed,
+    right_ex_speed,
+):
     robot.drivetrain = drivetrain_default
     dt = DriveTime(robot, duration, speed, "CustomDriveTime", timeout)
     sw = Stopwatch()
@@ -114,8 +131,8 @@ def test_command_full(robot, drivetrain_default, hal_data, duration, speed, time
     sw.start()
     while not dt.isFinished():
         dt.execute()
-        assert hal_data['pwm'][1]['value'] == left_ex_speed
-        assert hal_data['pwm'][2]['value'] == right_ex_speed
+        assert hal_data["pwm"][1]["value"] == left_ex_speed
+        assert hal_data["pwm"][2]["value"] == right_ex_speed
     dt.end()
     sw.stop()
     if duration < timeout:

@@ -3,8 +3,9 @@ from oi import JoystickAxis, UserController, JoystickButtons
 
 
 class TankDrive(Command):
-
-    def __init__(self, robot, name=None, modifier_scaling=0.5, dpad_scaling=0.4, timeout=15):
+    def __init__(
+        self, robot, name=None, modifier_scaling=0.5, dpad_scaling=0.4, timeout=15
+    ):
         """Constructor"""
         super().__init__(name, timeout)
         self.robot = robot
@@ -18,15 +19,23 @@ class TankDrive(Command):
 
     def execute(self):
         """Called repeatedly when this Command is scheduled to run"""
-        modifier = self.robot.oi.get_button_state(UserController.DRIVER, JoystickButtons.LEFTTRIGGER)
+        modifier = self.robot.oi.get_button_state(
+            UserController.DRIVER, JoystickButtons.LEFTTRIGGER
+        )
         dpad_y = self.robot.oi.get_axis(UserController.DRIVER, JoystickAxis.DPADY)
         if dpad_y != 0.0:
             self.robot.drivetrain.arcade_drive(self._dpad_scaling * dpad_y, 0.0)
         else:
-            left_track = self.robot.oi.get_axis(UserController.DRIVER, JoystickAxis.LEFTY)
-            right_track = self.robot.oi.get_axis(UserController.DRIVER, JoystickAxis.RIGHTY)
+            left_track = self.robot.oi.get_axis(
+                UserController.DRIVER, JoystickAxis.LEFTY
+            )
+            right_track = self.robot.oi.get_axis(
+                UserController.DRIVER, JoystickAxis.RIGHTY
+            )
             if modifier:
-                self.robot.drivetrain.tank_drive(self._stick_scaling * left_track, self._stick_scaling * right_track)
+                self.robot.drivetrain.tank_drive(
+                    self._stick_scaling * left_track, self._stick_scaling * right_track
+                )
             else:
                 self.robot.drivetrain.tank_drive(left_track, right_track)
         return Command.execute(self)

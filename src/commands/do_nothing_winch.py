@@ -2,7 +2,6 @@ from wpilib.command.command import Command
 
 
 class DoNothingWinch(Command):
-
     def __init__(self, robot, name=None, timeout=None):
         super().__init__(name, timeout)
         self.robot = robot

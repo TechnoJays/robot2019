@@ -2,7 +2,6 @@ from wpilib.command.command import Command
 
 
 class MoveWinch(Command):
-
     def __init__(self, robot, speed: float, name=None, timeout=15):
         """Constructor"""
         super().__init__(name, timeout)

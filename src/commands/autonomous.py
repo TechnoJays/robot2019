@@ -48,11 +48,9 @@ class FieldConfig(Enum):
 
 
 class AutoPlaceCube(CommandGroup):
-
-    def __init__(self,
-                 robot,
-                 field_config: FieldConfig,
-                 starting_position: StartingPosition):
+    def __init__(
+        self, robot, field_config: FieldConfig, starting_position: StartingPosition
+    ):
         super().__init__()
         self.addSequential(CrossLine(robot))
 
@@ -92,7 +90,9 @@ class CrossLine(CommandGroup):
     _drive_threshold: int = None
     _drive_time: float = None
 
-    def __init__(self, robot, config_path: str="/home/lvuser/py/configs/autonomous.ini"):
+    def __init__(
+        self, robot, config_path: str = "/home/lvuser/py/configs/autonomous.ini"
+    ):
         super().__init__()
         self._robot = robot
         config = ConfigParser()
@@ -108,14 +108,14 @@ class CrossLine(CommandGroup):
 
     def _initialize_commands(self):
         if use_drive_encoder(self._robot):
-            command = DriveEncoderCounts(self._robot,
-                                         self._drive_distance,
-                                         self._drive_speed,
-                                         self._drive_threshold)
+            command = DriveEncoderCounts(
+                self._robot,
+                self._drive_distance,
+                self._drive_speed,
+                self._drive_threshold,
+            )
         else:
-            command = DriveTime(self._robot,
-                                self._drive_time,
-                                self._drive_speed)
+            command = DriveTime(self._robot, self._drive_time, self._drive_speed)
         self.addSequential(command)
 
 
@@ -148,10 +148,12 @@ class PlaceCube(CommandGroup):
     _shoot_time: float = None
     _shoot_speed: float = None
 
-    def __init__(self,
-                 robot,
-                 goal: Goal,
-                 config_path: str="/home/lvuser/py/configs/autonomous.ini"):
+    def __init__(
+        self,
+        robot,
+        goal: Goal,
+        config_path: str = "/home/lvuser/py/configs/autonomous.ini",
+    ):
         super().__init__()
         self._robot = robot
         config = ConfigParser()
@@ -162,67 +164,81 @@ class PlaceCube(CommandGroup):
     def _initialize_commands(self):  # do some stuff here when james merges stuff
 
         if use_elevator_encoder(self._robot):
-            lift_command = SetElevatorToPosition(self._robot,
-                                                 self._lift_speed,
-                                                 self._lift_height,
-                                                 self._lift_threshold)
+            lift_command = SetElevatorToPosition(
+                self._robot, self._lift_speed, self._lift_height, self._lift_threshold
+            )
         else:
-            lift_command = MoveElevatorTime(self._robot,
-                                            self._lift_speed * ElevatorDirection.up,
-                                            self._lift_time)
+            lift_command = MoveElevatorTime(
+                self._robot, self._lift_speed * ElevatorDirection.up, self._lift_time
+            )
 
         self.addSequential(lift_command)
 
         if use_drive_encoder(self._robot):
-            forward_command = DriveEncoderCounts(self._robot,
-                                                 self._drive_distance,
-                                                 self._drive_speed,
-                                                 self._drive_threshold)
+            forward_command = DriveEncoderCounts(
+                self._robot,
+                self._drive_distance,
+                self._drive_speed,
+                self._drive_threshold,
+            )
         else:
-            forward_command = DriveTime(self._robot,
-                                        self._drive_time,
-                                        self._drive_speed)
+            forward_command = DriveTime(
+                self._robot, self._drive_time, self._drive_speed
+            )
 
         self.addSequential(forward_command)
 
-        self.addSequential(ShootLoad(self._robot,
-                                     self._shoot_time,
-                                     self._shoot_speed))
+        self.addSequential(ShootLoad(self._robot, self._shoot_time, self._shoot_speed))
 
         if use_drive_encoder(self._robot):
-            reverse_command = DriveEncoderCounts(self._robot,
-                                                 self._drive_distance,
-                                                 self._drive_speed,
-                                                 self._drive_threshold)
+            reverse_command = DriveEncoderCounts(
+                self._robot,
+                self._drive_distance,
+                self._drive_speed,
+                self._drive_threshold,
+            )
         else:
-            reverse_command = DriveTime(self._robot,
-                                        self._drive_time,
-                                        self._drive_speed)
+            reverse_command = DriveTime(
+                self._robot, self._drive_time, self._drive_speed
+            )
 
         self.addSequential(reverse_command)
 
         if use_elevator_encoder(self._robot):
-            lower_command = SetElevatorToPosition(self._robot,
-                                                  self._lift_speed,
-                                                  0,
-                                                  self._lift_threshold)
+            lower_command = SetElevatorToPosition(
+                self._robot, self._lift_speed, 0, self._lift_threshold
+            )
         else:
-            lower_command = MoveElevatorTime(self._robot,
-                                             self._lift_speed * ElevatorDirection.up,
-                                             self._lift_time)
+            lower_command = MoveElevatorTime(
+                self._robot, self._lift_speed * ElevatorDirection.up, self._lift_time
+            )
 
         self.addSequential(lower_command)
 
     def _load_config(self, parser: ConfigParser, goal: Goal):
         self._drive_speed = parser.getfloat(goal.place_config_section, self._SPEED_KEY)
-        self._drive_distance = parser.getint(goal.place_config_section, self._DISTANCE_FORWARD_KEY)
-        self._drive_threshold = parser.getint(goal.place_config_section, self._DRIVE_THRESHOLD_KEY)
-        self._drive_time = parser.getfloat(goal.place_config_section, self._TIME_FORWARD_KEY)
+        self._drive_distance = parser.getint(
+            goal.place_config_section, self._DISTANCE_FORWARD_KEY
+        )
+        self._drive_threshold = parser.getint(
+            goal.place_config_section, self._DRIVE_THRESHOLD_KEY
+        )
+        self._drive_time = parser.getfloat(
+            goal.place_config_section, self._TIME_FORWARD_KEY
+        )
 
-        self._lift_speed = parser.getfloat(goal.place_config_section, self._LIFT_SPEED_KEY)
-        self._lift_height = parser.getint(goal.place_config_section, self._LIFT_HEIGHT_KEY)
-        self._lift_threshold = parser.getint(goal.place_config_section, self._LIFT_THRESHOLD_KEY)
-        self._lift_time = parser.getfloat(goal.place_config_section, self._LIFT_TIME_KEY)
+        self._lift_speed = parser.getfloat(
+            goal.place_config_section, self._LIFT_SPEED_KEY
+        )
+        self._lift_height = parser.getint(
+            goal.place_config_section, self._LIFT_HEIGHT_KEY
+        )
+        self._lift_threshold = parser.getint(
+            goal.place_config_section, self._LIFT_THRESHOLD_KEY
+        )
+        self._lift_time = parser.getfloat(
+            goal.place_config_section, self._LIFT_TIME_KEY
+        )
 
 
 class DriveLineToGoal(CommandGroup):
@@ -253,11 +269,13 @@ class DriveLineToGoal(CommandGroup):
     _turn_degrees: float = None
     _turn_time: float = None
 
-    def __init__(self,
-                 robot,
-                 direction: TurnDirection,
-                 goal: Goal,
-                 config_path: str="/home/lvuser/py/configs/autonomous.ini"):
+    def __init__(
+        self,
+        robot,
+        direction: TurnDirection,
+        goal: Goal,
+        config_path: str = "/home/lvuser/py/configs/autonomous.ini",
+    ):
         super().__init__()
         self._robot = robot
         self._turn_direction = direction
@@ -268,54 +286,78 @@ class DriveLineToGoal(CommandGroup):
 
     def _initialize_commands(self):
         if use_drive_encoder(self._robot):
-            forward_command = DriveEncoderCounts(self._robot,
-                                                 self._distance_forward,
-                                                 self._drive_speed,
-                                                 self._encoder_threshold)
+            forward_command = DriveEncoderCounts(
+                self._robot,
+                self._distance_forward,
+                self._drive_speed,
+                self._encoder_threshold,
+            )
         else:
-            forward_command = DriveTime(self._robot,
-                                        self._time_forward,
-                                        self._drive_speed)
+            forward_command = DriveTime(
+                self._robot, self._time_forward, self._drive_speed
+            )
 
         self.addSequential(forward_command)
 
         if use_drive_gyro(self._robot):
-            turn_command = TurnDegrees(self._robot,
-                                       self._turn_degrees * self._turn_direction,
-                                       self._turn_speed,
-                                       self._encoder_threshold)
+            turn_command = TurnDegrees(
+                self._robot,
+                self._turn_degrees * self._turn_direction,
+                self._turn_speed,
+                self._encoder_threshold,
+            )
         else:
-            turn_command = TurnTime(self._robot,
-                                    self._turn_time,
-                                    self._turn_speed * self._turn_direction)
+            turn_command = TurnTime(
+                self._robot, self._turn_time, self._turn_speed * self._turn_direction
+            )
 
         self.addSequential(turn_command)
 
         if use_drive_encoder(self._robot):
-            lateral_command = DriveEncoderCounts(self._robot,
-                                                 self._distance_lateral,
-                                                 self._drive_speed,
-                                                 self._encoder_threshold)
+            lateral_command = DriveEncoderCounts(
+                self._robot,
+                self._distance_lateral,
+                self._drive_speed,
+                self._encoder_threshold,
+            )
         else:
-            lateral_command = DriveTime(self._robot,
-                                        self._time_lateral,
-                                        self._drive_speed)
+            lateral_command = DriveTime(
+                self._robot, self._time_lateral, self._drive_speed
+            )
 
         self.addSequential(lateral_command)
 
     def _load_config(self, config_parser: ConfigParser, goal: Goal):
-        self._drive_speed = config_parser.getfloat(goal.drive_config_section, self._SPEED)
-        self._turn_speed = config_parser.getfloat(goal.drive_config_section, self._TURN_SPEED)
+        self._drive_speed = config_parser.getfloat(
+            goal.drive_config_section, self._SPEED
+        )
+        self._turn_speed = config_parser.getfloat(
+            goal.drive_config_section, self._TURN_SPEED
+        )
 
-        self._encoder_threshold = config_parser.getint(goal.drive_config_section, self._DISTANCE_THRESHOLD)
-        self._distance_forward = config_parser.getint(goal.drive_config_section, self._DISTANCE_FORWARD)
-        self._distance_lateral = config_parser.getint(goal.drive_config_section, self._DISTANCE_LATERAL)
+        self._encoder_threshold = config_parser.getint(
+            goal.drive_config_section, self._DISTANCE_THRESHOLD
+        )
+        self._distance_forward = config_parser.getint(
+            goal.drive_config_section, self._DISTANCE_FORWARD
+        )
+        self._distance_lateral = config_parser.getint(
+            goal.drive_config_section, self._DISTANCE_LATERAL
+        )
 
-        self._time_forward = config_parser.getfloat(goal.drive_config_section, self._TIME_FORWARD)
-        self._time_lateral = config_parser.getfloat(goal.drive_config_section, self._TIME_LATERAL)
+        self._time_forward = config_parser.getfloat(
+            goal.drive_config_section, self._TIME_FORWARD
+        )
+        self._time_lateral = config_parser.getfloat(
+            goal.drive_config_section, self._TIME_LATERAL
+        )
 
-        self._turn_degrees = config_parser.getfloat(goal.drive_config_section, self._TURN_DEGREES)
-        self._turn_time = config_parser.getfloat(goal.drive_config_section, self._TURN_TIME)
+        self._turn_degrees = config_parser.getfloat(
+            goal.drive_config_section, self._TURN_DEGREES
+        )
+        self._turn_time = config_parser.getfloat(
+            goal.drive_config_section, self._TURN_TIME
+        )
 
 
 def use_drive_encoder(robot) -> bool:
