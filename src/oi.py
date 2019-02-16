@@ -65,7 +65,7 @@ class OI:
         self._create_smartdashboard_buttons()
 
     def setup_button_bindings(self):
-        release_panel_button = JoystickButton(self._controllers[UserController.SCORING], JoystickButtons.A)
+        release_panel_button = JoystickButton(self._controllers[UserController.DRIVER], JoystickButtons.A)
         release_panel_button.whileHeld(ReleasePanel(self.robot))
 
         raise_front_wheels_button = JoystickButton(self._controllers[UserController.DRIVER], JoystickButtons.RIGHTTRIGGER)
