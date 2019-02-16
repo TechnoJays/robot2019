@@ -52,8 +52,8 @@ class OI:
 
     FULL_SPEED_AHEAD: float = 1.0
 
-    # def __init__(self, robot, configfile='/home/lvuser/py/configs/joysticks.ini'):
-    def __init__(self, robot, configfile='./configs/joysticks.ini'):
+    def __init__(self, robot, configfile='/home/lvuser/py/configs/joysticks.ini'):
+        # def __init__(self, robot, configfile='./configs/joysticks.ini'):
         self.robot = robot
         self._config = configparser.ConfigParser()
         self._config.read(configfile)
