@@ -12,6 +12,8 @@ class JoystickAxis(object):
     """Enumerates joystick axis."""
     LEFTX = 0
     LEFTY = 1
+    LEFTTRIGGER = 2
+    RIGHTTRIGGER = 3
     RIGHTX = 4
     RIGHTY = 5
     DPADX = 11
@@ -26,8 +28,6 @@ class JoystickButtons(object):
     Y = 4
     LEFTBUMPER = 5
     RIGHTBUMPER = 6
-    LEFTTRIGGER = 7
-    RIGHTTRIGGER = 8
     BACK = 9
     START = 10
 
@@ -140,6 +140,8 @@ class OI:
         JoystickAxis.RIGHTY = self._config.getint(axis_binding_section, "RIGHTY")
         JoystickAxis.DPADX = self._config.getint(axis_binding_section, "DPADX")
         JoystickAxis.DPADY = self._config.getint(axis_binding_section, "DPADY")
+        JoystickAxis.LEFTTRIGGER = self._config.getint(axis_binding_section, "LEFTTRIGGER")
+        JoystickAxis.RIGHTTRIGGER = self._config.getint(axis_binding_section, "RIGHTTRIGGER")
 
         button_binding_section = "ButtonBindings"
         JoystickButtons.X = self._config.getint(button_binding_section, "X")
@@ -148,7 +150,5 @@ class OI:
         JoystickButtons.Y = self._config.getint(button_binding_section, "Y")
         JoystickButtons.LEFTBUMPER = self._config.getint(button_binding_section, "LEFTBUMPER")
         JoystickButtons.RIGHTBUMPER = self._config.getint(button_binding_section, "RIGHTBUMPER")
-        JoystickButtons.LEFTTRIGGER = self._config.getint(button_binding_section, "LEFTTRIGGER")
-        JoystickButtons.RIGHTTRIGGER = self._config.getint(button_binding_section, "RIGHTTRIGGER")
         JoystickButtons.BACK = self._config.getint(button_binding_section, "BACK")
         JoystickButtons.START = self._config.getint(button_binding_section, "START")
