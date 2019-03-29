@@ -27,9 +27,9 @@ class LineFollow(Command):
         # Check outside sensors first, then inner
         if len(line_sensors) == 5:
             if line_sensors[0] == 0:
-                self.robot.drivetrain.arcade_drive(0.0, -0.4, False)
+                self.robot.drivetrain.arcade_drive(0.0, -0.6, False)
             elif line_sensors[4] == 0:
-                self.robot.drivetrain.arcade_drive(0.0, 0.4, False)
+                self.robot.drivetrain.arcade_drive(0.0, 0.6, False)
             elif line_sensors[1] == 0:
                 self.robot.drivetrain.arcade_drive(0.0, -0.4, False)
             elif line_sensors[3] == 0:
@@ -37,7 +37,7 @@ class LineFollow(Command):
             elif line_sensors[2] == 0:
                 self.robot.drivetrain.arcade_drive(self._speed, 0.0, False)
             else:
-                self.robot.drivetrain.arcade_drive(0.0, 0.4, False)
+                self.robot.drivetrain.arcade_drive(0.0, 0.6, False)
         else:
             # No sensors available, so quit
             self._finished = True
